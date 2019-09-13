@@ -58,28 +58,49 @@ function clickReducer(state = initialState, action) {
 }
 
 function getPossibleMoves(tile, piece, board) {
-  if (Math.abs(piece) === 6) {
-    let moves = [];
-    let multiplier = piece === -6 ? 1 : -1;
-    let highlights = [2, 3, 3];
-    let possiblemoves = [tile + 8 * multiplier, tile + 7 * multiplier, tile + 9 * multiplier];
-    // If pawn is on second or seventh row add extra move (initial position)
-    if (
-      (piece === 6 && Math.floor(tile / 8) === 6) ||
-      (piece === -6 && Math.floor(tile / 8) === 1)
-    ) {
-      highlights.push(2);
-      possiblemoves.push(tile + 16 * multiplier);
-    }
-    // Push the move if the highlight color matches the expected highlight
-    possiblemoves.forEach((move, index) => {
-      if (shouldHighlight(piece, board[move]) === highlights[index]) {
-        moves.push(move);
+  let moves = [];
+  // Pawn
+  switch (Math.abs(piece)) {
+    case 6:
+      let multiplier = piece === -6 ? 1 : -1;
+      let possiblemoves = [tile + 8 * multiplier];
+      // If pawn is on second or seventh row add extra move (initial position)
+      if (
+        (piece === 6 && Math.floor(tile / 8) === 6) ||
+        (piece === -6 && Math.floor(tile / 8) === 1)
+      ) {
+        possiblemoves.push(tile + 16 * multiplier);
       }
-    });
-    return moves.filter(move => move >= 0 && move < 64);
+      // Push the move if the highlight color matches the expected highlight
+      for (let i = 0; i < possiblemoves.length; i++) {
+        if (shouldHighlight(piece, board[possiblemoves[i]]) === 2) {
+          moves.push(possiblemoves[i]);
+        } else {
+          break; // Break early because the Pawn is blocked from moving forward
+        }
+      }
+      possiblemoves = [tile + 7 * multiplier, tile + 9 * multiplier];
+      possiblemoves.forEach(move => {
+        // Check for enemy
+        if (shouldHighlight(piece, board[move]) === 3) {
+          moves.push(move);
+        }
+      });
+      break;
+
+    case 5:
+      let rows = [-2, -2, -1, 1, 2, 2, 1, -1];
+      let cols = [-1, 1, 2, 2, 1, -1, -2, -2];
+      rows.forEach((row, index) => {
+        if (staysOn(tile, row, cols[index])) {
+          moves.push(tile + 8 * row + cols[index]);
+        }
+      });
+      break;
+    default:
+      return piece < 0 ? [(tile + 8) % 64] : [(tile + 56) % 64];
   }
-  return piece < 0 ? [(tile + 8) % 64] : [(tile + 56) % 64];
+  return moves.filter(move => move >= 0 && move < 64);
 }
 
 // Finds the relationship between the two pieces and returns an integer indicating what color should piece2 be highlighted as
@@ -90,6 +111,13 @@ function shouldHighlight(piece1, piece2) {
   console.log(piece1, piece2);
   let parity = piece1 * piece2;
   return parity === 0 ? 2 : parity < 0 ? 3 : 0;
+}
+
+// Returns true if moving the tile by the given row and col adjustment will not cause the tile to fall off the board
+function staysOn(tile, row, col) {
+  let newRow = Math.floor(tile / 8) + row;
+  let newCol = (tile % 8) + col;
+  return newRow >= 0 && newRow < 8 && newCol >= 0 && newRow < 8;
 }
 
 export default clickReducer;
