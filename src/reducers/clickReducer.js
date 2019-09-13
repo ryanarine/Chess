@@ -59,6 +59,8 @@ function clickReducer(state = initialState, action) {
 
 function getPossibleMoves(tile, piece, board) {
   let moves = [];
+  let rows = [];
+  let cols = [];
   // Pawn
   switch (Math.abs(piece)) {
     case 6:
@@ -89,14 +91,38 @@ function getPossibleMoves(tile, piece, board) {
       break;
 
     case 5:
-      let rows = [-2, -2, -1, 1, 2, 2, 1, -1];
-      let cols = [-1, 1, 2, 2, 1, -1, -2, -2];
+      rows = [-2, -2, -1, 1, 2, 2, 1, -1];
+      cols = [-1, 1, 2, 2, 1, -1, -2, -2];
       rows.forEach((row, index) => {
         if (staysOn(tile, row, cols[index])) {
           moves.push(tile + 8 * row + cols[index]);
         }
       });
       break;
+    case 4:
+      rows = [-8, 8];
+      cols = [-1, 1];
+      for (let i = 0; i < rows.length; i++) {
+        for (let j = 0; j < cols.length; j++) {
+          let multiplier = 1;
+          // rows[i] and cols[j] determine direction, multiplier determines how far to move
+          while (staysOn(tile, (rows[i] / 8) * multiplier, cols[j] * multiplier)) {
+            let highlight = shouldHighlight(piece, board[tile + (rows[i] + cols[j]) * multiplier]);
+            // If ally is blocking path, don't add the move and stop moving in this direction
+            if (highlight === 0) {
+              break;
+            }
+            // Add the move and if enemy is blocking path, stop moving in this direction
+            moves.push(tile + (rows[i] + cols[j]) * multiplier);
+            if (highlight === 3) {
+              break;
+            }
+            multiplier++;
+          }
+        }
+      }
+      break;
+
     default:
       return piece < 0 ? [(tile + 8) % 64] : [(tile + 56) % 64];
   }
@@ -108,7 +134,6 @@ function getPossibleMoves(tile, piece, board) {
 // 2 = Neutral/Blank tile => Blue highlight
 // 3 = Enemy => Red highlight
 function shouldHighlight(piece1, piece2) {
-  console.log(piece1, piece2);
   let parity = piece1 * piece2;
   return parity === 0 ? 2 : parity < 0 ? 3 : 0;
 }
