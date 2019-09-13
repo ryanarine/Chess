@@ -10,9 +10,10 @@ function handleClick(tile, piece, dispatch) {
     dispatch(highlight(tile, piece));
     return;
   }
-  let highlightedTile = store.getState("tiles").tiles.highlightedPieces;
+  let highlightedTiles = store.getState("tiles").tiles.highlightedTiles;
   let selectedTile = store.getState("tiles").tiles.selectedTile;
-  if (selectedTile !== -1 && highlightedTile === tile) {
+  // Check if the player selected a piece and the piece can move to the clicked tile
+  if (selectedTile !== -1 && highlightedTiles.find(htile => htile === tile) >= 0) {
     dispatch(move(tile, piece));
     return;
   }
