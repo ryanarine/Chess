@@ -4,7 +4,8 @@ This application simulates a chess game, but currently it is in its infancy stag
 ### Features that have been added
 -The board and the chess pieces <br>
 -Players take turns moving pieces <br>
--Players can move pieces but they can only move forward 1 tile and they can move from one end of the board if they reach the other end.
+-Players can move pawns and attack with them correctly <br>
+-Players can move other pieces but they can only move forward 1 tile and they can move from one end of the board if they reach the other end.
 
 ### The Application
 You can view this application [here](https://ryanarine.github.io/Chess/).
