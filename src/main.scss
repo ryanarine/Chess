@@ -1,0 +1,48 @@
+$colors: (
+  primary: #00c,
+  primary-light: #008fff
+);
+
+@function color($colorName) {
+  @return map-get($colors, $colorName);
+}
+
+$tablet-width: 768px;
+
+@mixin tablet {
+  @media (min-width: #{$tablet-width}) {
+    @content;
+  }
+}
+
+body,
+html {
+  min-height: 100%;
+  min-width: 500px;
+}
+
+body {
+  background-color: color(primary);
+  background-image: linear-gradient(color(primary-light), color(primary));
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin: 0;
+}
+
+#title {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  color: white;
+  font-weight: 100;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  width: 100%;
+  margin: auto;
+  @include tablet {
+    width: 80%;
+  }
+}
