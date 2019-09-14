@@ -58,75 +58,69 @@ function clickReducer(state = initialState, action) {
 }
 
 function getPossibleMoves(tile, piece, board) {
-  let moves = [];
   let rows = [];
   let cols = [];
   // Pawn
   switch (Math.abs(piece)) {
     case 6:
+      let moves = [];
       let multiplier = piece === -6 ? 1 : -1;
-      let possiblemoves = [tile + 8 * multiplier];
+      // First deal with forward movements
+      let possibleMoves = [multiplier];
       // If pawn is on second or seventh row add extra move (initial position)
       if (
         (piece === 6 && Math.floor(tile / 8) === 6) ||
         (piece === -6 && Math.floor(tile / 8) === 1)
       ) {
-        possiblemoves.push(tile + 16 * multiplier);
+        possibleMoves.push(2 * multiplier);
       }
-      // Push the move if the highlight color matches the expected highlight
-      for (let i = 0; i < possiblemoves.length; i++) {
-        if (shouldHighlight(piece, board[possiblemoves[i]]) === 2) {
-          moves.push(possiblemoves[i]);
+      // Push the move if there is an empty tile in front
+      for (let i = 0; i < possibleMoves.length; i++) {
+        if (
+          staysOn(tile, possibleMoves[i], 0) &&
+          shouldHighlight(piece, board[tile + 8 * possibleMoves[i]]) === 2
+        ) {
+          moves.push(tile + 8 * possibleMoves[i]);
         } else {
           break; // Break early because the Pawn is blocked from moving forward
         }
       }
-      possiblemoves = [tile + 7 * multiplier, tile + 9 * multiplier];
-      possiblemoves.forEach(move => {
-        // Check for enemy
-        if (shouldHighlight(piece, board[move]) === 3) {
-          moves.push(move);
+
+      // Now deal with diagonal movements
+      let diagonalOffsets = [-1, 1];
+      diagonalOffsets.forEach(offset => {
+        // Push the move if there is an enemy
+        if (
+          staysOn(tile, multiplier, offset) &&
+          shouldHighlight(piece, board[tile + 8 * multiplier + offset]) === 3
+        ) {
+          moves.push(tile + 8 * multiplier + offset);
         }
       });
-      break;
+      return moves;
 
     case 5:
       rows = [-2, -2, -1, 1, 2, 2, 1, -1];
       cols = [-1, 1, 2, 2, 1, -1, -2, -2];
-      rows.forEach((row, index) => {
-        if (staysOn(tile, row, cols[index])) {
-          moves.push(tile + 8 * row + cols[index]);
-        }
-      });
-      break;
+      return circlePath(tile, rows, cols);
+
     case 4:
-      rows = [-8, 8];
-      cols = [-1, 1];
-      for (let i = 0; i < rows.length; i++) {
-        for (let j = 0; j < cols.length; j++) {
-          let multiplier = 1;
-          // rows[i] and cols[j] determine direction, multiplier determines how far to move
-          while (staysOn(tile, (rows[i] / 8) * multiplier, cols[j] * multiplier)) {
-            let highlight = shouldHighlight(piece, board[tile + (rows[i] + cols[j]) * multiplier]);
-            // If ally is blocking path, don't add the move and stop moving in this direction
-            if (highlight === 0) {
-              break;
-            }
-            // Add the move and if enemy is blocking path, stop moving in this direction
-            moves.push(tile + (rows[i] + cols[j]) * multiplier);
-            if (highlight === 3) {
-              break;
-            }
-            multiplier++;
-          }
-        }
-      }
-      break;
+      return diagonalPath(tile, piece, board);
+
+    case 3:
+      return straightPath(tile, piece, board);
+
+    case 2:
+      return straightPath(tile, piece, board).concat(diagonalPath(tile, piece, board));
+
+    case 1:
+      rows = [-1, -1, 0, 1, 1, 1, 0, -1, -1];
+      cols = [0, 1, 1, 1, 0, -1, -1, -1, -1];
+      return circlePath(tile, rows, cols);
 
     default:
-      return piece < 0 ? [(tile + 8) % 64] : [(tile + 56) % 64];
+      return [];
   }
-  return moves.filter(move => move >= 0 && move < 64);
 }
 
 // Finds the relationship between the two pieces and returns an integer indicating what color should piece2 be highlighted as
@@ -142,7 +136,80 @@ function shouldHighlight(piece1, piece2) {
 function staysOn(tile, row, col) {
   let newRow = Math.floor(tile / 8) + row;
   let newCol = (tile % 8) + col;
-  return newRow >= 0 && newRow < 8 && newCol >= 0 && newRow < 8;
+  return newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8;
+}
+
+// Used for the Rook and Queen
+function straightPath(tile, piece, board) {
+  let moves = [];
+  let multiplier = 1;
+  let row = 0;
+  let col = 0;
+  [8, -8, 1, -1].forEach(direction => {
+    multiplier = 1;
+    if (Math.abs(direction) === 8) {
+      row = direction / 8;
+      col = 0;
+    } else if (Math.abs(direction) === 1) {
+      row = 0;
+      col = direction;
+    }
+    while (staysOn(tile, row * multiplier, col * multiplier)) {
+      let highlight = shouldHighlight(piece, board[tile + direction * multiplier]);
+      // If ally is blocking path, don't add the move and stop moving in this direction
+      if (highlight === 0) {
+        break;
+      }
+      // Add the move and if enemy is blocking path, stop moving in this direction
+      moves.push(tile + direction * multiplier);
+      if (highlight === 3) {
+        break;
+      }
+      multiplier++;
+    }
+  });
+  return moves;
+}
+
+// Used for the Bishop and Queen
+function diagonalPath(tile, piece, board) {
+  let moves = [];
+  let multiplier = 1;
+  let rows = [-8, 8];
+  let cols = [-1, 1];
+  for (let i = 0; i < rows.length; i++) {
+    for (let j = 0; j < cols.length; j++) {
+      // rows[i] and cols[j] determine direction, multiplier determines how far to move
+      multiplier = 1;
+      // Advance in direction while we are on the board and nothing is blocking the path
+      while (staysOn(tile, (rows[i] / 8) * multiplier, cols[j] * multiplier)) {
+        let highlight = shouldHighlight(piece, board[tile + (rows[i] + cols[j]) * multiplier]);
+        // If ally is blocking path, don't add the move and stop moving in this direction
+        if (highlight === 0) {
+          break;
+        }
+        // Add the move and if enemy is blocking path, stop moving in this direction
+        moves.push(tile + (rows[i] + cols[j]) * multiplier);
+        if (highlight === 3) {
+          break;
+        }
+        multiplier++;
+      }
+    }
+  }
+  return moves;
+}
+
+// Used for the Knight and King
+// The rows and columns given simulate a circular path going clockwise from a zero degree bearing
+function circlePath(tile, rows, cols) {
+  let moves = [];
+  rows.forEach((row, index) => {
+    if (staysOn(tile, row, cols[index])) {
+      moves.push(tile + 8 * row + cols[index]);
+    }
+  });
+  return moves;
 }
 
 export default clickReducer;
