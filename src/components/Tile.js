@@ -1,23 +1,30 @@
 import React from "react";
 import Image from "./Image";
 import { useSelector, useDispatch } from "react-redux";
-import { highlight, unHighlight, move } from "../actions";
+import { highlight, unHighlight, move, win } from "../actions";
 import store from "../store";
 
 function handleClick(tile, piece, dispatch) {
-  let turn = store.getState("tiles").tiles.turn;
-  if ((turn && piece > 0) || (!turn && piece < 0)) {
-    dispatch(highlight(tile, piece));
-    return;
+  let gameOver = store.getState("tiles").tiles.gameOver;
+  if (!gameOver) {
+    let turn = store.getState("tiles").tiles.turn;
+    if ((turn && piece > 0) || (!turn && piece < 0)) {
+      dispatch(highlight(tile, piece));
+      return;
+    }
+    let highlightedTiles = store.getState("tiles").tiles.highlightedTiles;
+    let selectedTile = store.getState("tiles").tiles.selectedTile;
+    // Check if the player selected a piece and the piece can move to the clicked tile
+    if (selectedTile !== -1 && highlightedTiles.find(htile => htile === tile) >= 0) {
+      // Check if the King died
+      if (Math.abs(piece) === 1) {
+        piece === 1 ? dispatch(win(false)) : dispatch(win(true));
+      }
+      dispatch(move(tile, piece));
+      return;
+    }
+    dispatch(unHighlight());
   }
-  let highlightedTiles = store.getState("tiles").tiles.highlightedTiles;
-  let selectedTile = store.getState("tiles").tiles.selectedTile;
-  // Check if the player selected a piece and the piece can move to the clicked tile
-  if (selectedTile !== -1 && highlightedTiles.find(htile => htile === tile) >= 0) {
-    dispatch(move(tile, piece));
-    return;
-  }
-  dispatch(unHighlight());
 }
 
 function Tile(props) {

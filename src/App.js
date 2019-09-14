@@ -5,7 +5,7 @@ import Title from "./components/Title";
 
 function App() {
   return (
-    <div>
+    <div id="game-container">
       <Title />
       <Board />
     </div>

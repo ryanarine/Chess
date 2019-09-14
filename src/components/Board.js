@@ -23,7 +23,7 @@ function Board() {
   const tiles = board.map((piece, index) => (
     <Tile key={index} tile={index} bg={backgrounds[getBg(index)]} />
   ));
-  return <div className={"board"}>{tiles}</div>;
+  return <div id="board">{tiles}</div>;
 }
 
 export default Board;

@@ -9,3 +9,11 @@ export function unHighlight() {
 export function move(newTile, piece) {
   return { type: "MOVE", newTile, piece };
 }
+
+export function win(didWhiteWin) {
+  return { type: "WIN", didWhiteWin };
+}
+
+export function reset() {
+  return { type: "RESET" };
+}

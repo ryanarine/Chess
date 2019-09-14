@@ -13,26 +13,46 @@ body {
   margin: 0;
 }
 
+#game-container {
+  width: 100%;
+  margin: auto;
+}
+
+@media (min-width: 768px) {
+  #game-container {
+    width: 80%;
+  }
+}
+
+#header {
+  text-align: center;
+}
+
 #title {
   margin: 0;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
   color: white;
   font-weight: 100;
+  display: inline;
 }
 
-.board {
+#reset {
+  float: right;
+  margin-top: 8px;
+  background-color: green;
+  border: 2px solid darkgreen;
+  font-size: 20px;
+  border-radius: 100px;
+  color: white;
+  cursor: pointer;
+}
+
+#board {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[8];
       grid-template-columns: repeat(8, 1fr);
   width: 100%;
-  margin: auto;
-}
-
-@media (min-width: 768px) {
-  .board {
-    width: 80%;
-  }
 }
 /*# sourceMappingURL=main.css.map */

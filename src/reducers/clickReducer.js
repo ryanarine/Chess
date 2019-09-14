@@ -11,21 +11,25 @@ function initialBoard() {
   return row0.concat(row1, row2to5, row6, row7);
 }
 
-const initialState = {
-  board: initialBoard(),
-  turn: true, // Whose turn is it? true = White false = Black
-  tileBg: new Array(64).fill(0), // The background color of each tile
-  // The tile holding the piece that the player wants to move
-  // The background color of the selected tile must be green
-  selectedTile: -1,
-  // The tiles that the selected piece can potentially move to
-  // The background colors of these tiles must be blue or red
-  // or the default color if the piece cannot move there because
-  // an ally piece is occupying it
-  highlightedTiles: []
-};
+function getInitialState() {
+  return {
+    board: initialBoard(),
+    turn: true, // Whose turn is it? true = White false = Black
+    tileBg: new Array(64).fill(0), // The background color of each tile
+    // The tile holding the piece that the player wants to move
+    // The background color of the selected tile must be green
+    selectedTile: -1,
+    // The tiles that the selected piece can potentially move to
+    // The background colors of these tiles must be blue or red
+    // or the default color if the piece cannot move there because
+    // an ally piece is occupying it
+    highlightedTiles: [],
+    gameOver: false,
+    didWhiteWin: false
+  };
+}
 
-function clickReducer(state = initialState, action) {
+function clickReducer(state = getInitialState(), action) {
   if (action.type === "UNHIGHLIGHT" || action.type === "MOVE") {
     if (action.type === "MOVE") {
       // Move piece to new tile and clear out old tile
@@ -53,6 +57,11 @@ function clickReducer(state = initialState, action) {
       // determine the highlight color
       state.tileBg[tile] = shouldHighlight(state.board[action.tile], state.board[tile]);
     });
+  } else if (action.type === "WIN") {
+    state.gameOver = true;
+    state.didWhiteWin = action.didWhiteWin;
+  } else if (action.type === "RESET") {
+    state = getInitialState();
   }
   return state;
 }
