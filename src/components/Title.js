@@ -1,6 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { reset } from "../actions";
+import PromotionForm from "./PromotionForm";
 
 const modeMap = ["White's Turn", "Black's Turn", "White Wins!", "Black Wins!"];
 const colorMap = ["white", "black"];
@@ -14,6 +15,7 @@ function Title() {
   let turn = useSelector(state => state.tiles.turn);
   let gameOver = useSelector(state => state.tiles.gameOver);
   let didWhiteWin = useSelector(state => state.tiles.didWhiteWin);
+  let promotedTile = useSelector(state => state.tiles.promotedTile);
   let index = turn ? 0 : 1;
   if (gameOver) {
     index = didWhiteWin ? 2 : 3;
@@ -23,6 +25,7 @@ function Title() {
       <h1 id="title" style={{ color: colorMap[index % 2] }}>
         {modeMap[index]}
       </h1>
+      <PromotionForm show={promotedTile !== -1} />
       <button id="reset" onClick={() => sendReset(dispatch)}>
         Reset
       </button>

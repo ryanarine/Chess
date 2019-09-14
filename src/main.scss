@@ -8,6 +8,12 @@ $colors: (
 }
 
 $tablet-width: 768px;
+$font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+@mixin font {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 100;
+}
 
 @mixin tablet {
   @media (min-width: #{$tablet-width}) {
@@ -18,7 +24,7 @@ $tablet-width: 768px;
 body,
 html {
   min-height: 100%;
-  min-width: 500px;
+  min-width: 600px;
 }
 
 body {
@@ -43,22 +49,80 @@ body {
 
 #title {
   margin: 0;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
   color: white;
-  font-weight: 100;
+  @include font;
   display: inline;
+}
+
+.modal-container {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+  padding-top: 60px;
+}
+
+.modal {
+  margin-top: 10%;
+  width: 300px;
+  @include tablet {
+    width: 40%;
+  }
+  background-color: color(primary);
+  background-image: linear-gradient(color(primary-light), color(primary));
+  border: 2px solid black;
+  border-radius: 10px;
+  margin: auto;
+  padding-bottom: 20px;
+  h1,
+  h2,
+  label,
+  input[type="submit"] {
+    @include font;
+    color: white;
+  }
+  label,
+  input[type="submit"] {
+    font-size: 20px;
+  }
+}
+
+.two-columns {
+  display: grid;
+  grid-template-columns: 55% 10%;
+  grid-row-gap: 5px;
+  margin-bottom: 5px;
+  label {
+    text-align: right;
+  }
+  input[type="radio"] {
+    margin-top: 10px;
+    margin-left: 10px;
+  }
+}
+
+button,
+input[type="submit"] {
+  background-color: green;
+  border: 2px solid darkgreen;
+  background-image: radial-gradient(forestgreen, green);
+  border-radius: 100px;
+  padding-bottom: 4px;
+  @include font;
+  cursor: pointer;
 }
 
 #reset {
   float: right;
   margin-top: 8px;
-  background-color: green;
-  border: 2px solid darkgreen;
   font-size: 20px;
-  border-radius: 100px;
   color: white;
-  cursor: pointer;
 }
 
 #board {

@@ -17,3 +17,11 @@ export function win(didWhiteWin) {
 export function reset() {
   return { type: "RESET" };
 }
+
+export function sendPromote(tile, row) {
+  return { type: "SENDPROMOTE", tile, row };
+}
+
+export function promote(piece) {
+  return { type: "PROMOTE", piece };
+}

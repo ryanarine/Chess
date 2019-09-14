@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "./Image";
 import { useSelector, useDispatch } from "react-redux";
-import { highlight, unHighlight, move, win } from "../actions";
+import { highlight, unHighlight, move, win, sendPromote } from "../actions";
 import store from "../store";
 
 function handleClick(tile, piece, dispatch) {
@@ -17,10 +17,17 @@ function handleClick(tile, piece, dispatch) {
     // Check if the player selected a piece and the piece can move to the clicked tile
     if (selectedTile !== -1 && highlightedTiles.find(htile => htile === tile) >= 0) {
       // Check if the King died
+      dispatch(move(tile, piece));
       if (Math.abs(piece) === 1) {
         piece === 1 ? dispatch(win(false)) : dispatch(win(true));
       }
-      dispatch(move(tile, piece));
+      // Check if the first or last row was reached to potentially promote a pawn
+      else {
+        let row = Math.floor(tile / 8);
+        if (row === 0 || row === 7) {
+          dispatch(sendPromote(tile, row));
+        }
+      }
       return;
     }
     dispatch(unHighlight());

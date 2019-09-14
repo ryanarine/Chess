@@ -25,7 +25,8 @@ function getInitialState() {
     // an ally piece is occupying it
     highlightedTiles: [],
     gameOver: false,
-    didWhiteWin: false
+    didWhiteWin: false,
+    promotedTile: -1
   };
 }
 
@@ -62,6 +63,17 @@ function clickReducer(state = getInitialState(), action) {
     state.didWhiteWin = action.didWhiteWin;
   } else if (action.type === "RESET") {
     state = getInitialState();
+  } else if (action.type === "SENDPROMOTE") {
+    let piece = state.board[action.tile];
+    if ((piece === 6 && action.row === 0) || (piece === -6 && action.row === 7)) {
+      state.promotedTile = action.tile;
+    }
+  } else if (action.type === "PROMOTE") {
+    // Check whether the promoted piece should be black or white
+    console.log(action);
+    let piece = state.promotedTile < 8 ? action.piece : action.piece * -1;
+    state.board[state.promotedTile] = piece;
+    state.promotedTile = -1;
   }
   return state;
 }
