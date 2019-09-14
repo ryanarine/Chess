@@ -11,6 +11,9 @@ function initialBoard() {
   return row0.concat(row1, row2to5, row6, row7);
 }
 
+function getBg(index) {
+  return (Math.floor(index / 8) + (index % 8)) % 2;
+}
 const backgrounds = ["white", "black"];
 
 initialBoard();
@@ -18,7 +21,7 @@ function Board() {
   const board = useSelector(state => state.tiles.board);
 
   const tiles = board.map((piece, index) => (
-    <Tile key={index} tile={index} bg={backgrounds[index % 2]} />
+    <Tile key={index} tile={index} bg={backgrounds[getBg(index)]} />
   ));
   return <div className={"board"}>{tiles}</div>;
 }
