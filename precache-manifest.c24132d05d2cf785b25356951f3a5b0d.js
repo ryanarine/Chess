@@ -1,19 +1,19 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "8a75f56239909a2f07f6db81f86b4cff",
+    "revision": "f2f1b9c63b160cebe59e3da0bab20767",
     "url": "/Chess/index.html"
   },
   {
-    "revision": "e4b3cd6283a65408853b",
-    "url": "/Chess/static/css/main.e254e319.chunk.css"
+    "revision": "e6d95ba822af0c801318",
+    "url": "/Chess/static/css/main.e2b257cb.chunk.css"
   },
   {
-    "revision": "855b6e73e8d0d5e8da1e",
-    "url": "/Chess/static/js/2.1e4f3cd9.chunk.js"
+    "revision": "86c1d695bc1b7827eeb9",
+    "url": "/Chess/static/js/2.7d65c4bd.chunk.js"
   },
   {
-    "revision": "e4b3cd6283a65408853b",
-    "url": "/Chess/static/js/main.dcbbec27.chunk.js"
+    "revision": "e6d95ba822af0c801318",
+    "url": "/Chess/static/js/main.9cf8bc15.chunk.js"
   },
   {
     "revision": "7dee9a33359694beb0b2",
@@ -42,10 +42,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "3c507f6ac14a190374947d1acdd821ab",
     "url": "/Chess/static/media/BRook.3c507f6a.PNG"
-  },
-  {
-    "revision": "37b0d687a35e8593ae0cfab4cca2106c",
-    "url": "/Chess/static/media/Blank.37b0d687.PNG"
   },
   {
     "revision": "b95eba4fb48254bb8bedce75c8f6320a",
