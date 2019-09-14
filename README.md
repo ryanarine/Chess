@@ -5,12 +5,12 @@ This application simulates game of Chess. This application uses the React framew
 -The board and the chess pieces <br>
 -Players take turns moving pieces <br>
 -Players can move each piece and attack with them correctly <br>
+-Pawn Promotion <br>
 -The board recognizes when a Player has won <br>
 -The board can be reset at any time by clicking the reset button
 
 ### Features that have yet to be added
 -Two counters to keep track of wins <br>
--Pawn Promotion <br>
 -Special moves like En passant and Castling
 
 ### The Application
