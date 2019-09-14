@@ -5,7 +5,6 @@ import WBishop from "./images/WBishop.PNG";
 import WKnight from "./images/WKnight.PNG";
 import WKing from "./images/WKing.PNG";
 import WQueen from "./images/WQueen.PNG";
-import none from "./images/Blank.PNG";
 import BPawn from "./images/BPawn.PNG";
 import BRook from "./images/BRook.PNG";
 import BBishop from "./images/BBishop.PNG";
@@ -20,7 +19,7 @@ const imgMap = [
   BRook,
   BQueen,
   BKing,
-  none,
+  "",
   WKing,
   WQueen,
   WRook,
@@ -55,6 +54,9 @@ function Image(props) {
     margin: "auto",
     height: "100%"
   };
+  if (props.name === 0) {
+    return <React.Fragment></React.Fragment>;
+  }
   return <img src={getImg(props.name)} style={imgStyle} alt={stringMap[props.name + 6]} />;
 }
 
