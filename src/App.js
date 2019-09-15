@@ -1,12 +1,14 @@
 import React from "react";
 import "./main.css";
 import Board from "./components/Board";
-import Title from "./components/Title";
+import Header from "./components/Header";
+import PromotionForm from "./components/PromotionForm";
 
 function App() {
   return (
     <div id="game-container">
-      <Title />
+      <Header />
+      <PromotionForm />
       <Board />
     </div>
   );

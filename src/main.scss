@@ -8,8 +8,6 @@ $colors: (
 }
 
 $tablet-width: 768px;
-$font: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-$modal-padding: 60px;
 
 @mixin font {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -48,39 +46,48 @@ input[type="submit"] {
 }
 
 #game-container {
-  width: 100%;
+  width: 95%;
   margin: auto;
   @include tablet {
     width: 80%;
   }
 }
 
+/* Header */
 #header {
-  text-align: center;
-}
-
-#title {
-  margin: 0;
-  text-align: center;
-  color: white;
-  @include font;
-  display: inline;
+  display: grid;
+  justify-items: center;
+  grid-template-columns: 1fr 1fr 1fr;
+  h2 {
+    @include font;
+    display: inline;
+    margin: 0;
+  }
 }
 
 #reset {
-  float: right;
-  margin-top: 8px;
+  margin: 4px 0;
   font-size: 20px;
   color: white;
+  justify-self: center;
+  grid-column: 1 / 4;
+  animation: spin 4000ms infinite linear;
 }
 
+/* The chess board */
 #board {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   width: 100%;
+  box-shadow: 10px 10px 10px black;
 }
 
-/* Promotion Form */
+.tile {
+  border: 2px solid #666;
+  height: 10vh;
+}
+
+/* The Promotion Form */
 .modal {
   position: fixed;
   z-index: 1;
@@ -93,14 +100,15 @@ input[type="submit"] {
 }
 
 .modal-wrapper {
-  max-height: calc(100vh - #{$modal-padding});
   overflow-y: auto;
-  padding-top: $modal-padding;
+  @include tablet {
+    padding-top: 60px;
+  }
 }
 
 .modal-content {
-  margin-top: 10%;
   width: 300px;
+  height: 100%;
   @include tablet {
     width: 40%;
   }
@@ -116,6 +124,7 @@ input[type="submit"] {
   input[type="submit"] {
     @include font;
     color: white;
+    text-align: center;
   }
   label,
   input[type="submit"] {
@@ -123,16 +132,17 @@ input[type="submit"] {
   }
 }
 
-.two-columns {
+.promotion-input {
   display: grid;
-  grid-template-columns: 55% 10%;
+  grid-template-columns: repeat(4, 1fr);
   grid-row-gap: 5px;
+  grid-template-rows: 50px 30px 20px 40px;
   margin-bottom: 5px;
-  label {
-    text-align: right;
-  }
   input[type="radio"] {
-    margin-top: 10px;
-    margin-left: 10px;
+    margin: auto;
+    transform: scale(1.5);
+  }
+  input[type="submit"] {
+    grid-column: 2 / 4;
   }
 }

@@ -11,7 +11,7 @@ function initialBoard() {
   return row0.concat(row1, row2to5, row6, row7);
 }
 
-function getInitialState() {
+function getInitialState(WWins = 0, BWins = 0) {
   return {
     board: initialBoard(),
     turn: true, // Whose turn is it? true = White false = Black
@@ -26,11 +26,15 @@ function getInitialState() {
     highlightedTiles: [],
     gameOver: false,
     didWhiteWin: false,
-    promotedTile: -1
+    // The tile position of the pawn to be promoted if there are any
+    promotedTile: -1,
+    // # of wins
+    whiteWins: WWins,
+    blackWins: BWins
   };
 }
 
-function clickReducer(state = getInitialState(), action) {
+function chessReducer(state = getInitialState(), action) {
   if (action.type === "UNHIGHLIGHT" || action.type === "MOVE") {
     if (action.type === "MOVE") {
       // Move piece to new tile and clear out old tile
@@ -61,8 +65,9 @@ function clickReducer(state = getInitialState(), action) {
   } else if (action.type === "WIN") {
     state.gameOver = true;
     state.didWhiteWin = action.didWhiteWin;
+    action.didWhiteWin ? state.whiteWins++ : state.blackWins++;
   } else if (action.type === "RESET") {
-    state = getInitialState();
+    state = getInitialState(state.whiteWins, state.blackWins);
   } else if (action.type === "SENDPROMOTE") {
     let piece = state.board[action.tile];
     if ((piece === 6 && action.row === 0) || (piece === -6 && action.row === 7)) {
@@ -70,7 +75,6 @@ function clickReducer(state = getInitialState(), action) {
     }
   } else if (action.type === "PROMOTE") {
     // Check whether the promoted piece should be black or white
-    console.log(action);
     let piece = state.promotedTile < 8 ? action.piece : action.piece * -1;
     state.board[state.promotedTile] = piece;
     state.promotedTile = -1;
@@ -233,4 +237,4 @@ function circlePath(tile, rows, cols) {
   return moves;
 }
 
-export default clickReducer;
+export default chessReducer;

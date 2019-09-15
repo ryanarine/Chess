@@ -5,15 +5,15 @@ import { highlight, unHighlight, move, win, sendPromote } from "../actions";
 import store from "../store";
 
 function handleClick(tile, piece, dispatch) {
-  let gameOver = store.getState("tiles").tiles.gameOver;
+  let gameOver = store.getState("state").gameOver;
   if (!gameOver) {
-    let turn = store.getState("tiles").tiles.turn;
+    let turn = store.getState("state").turn;
     if ((turn && piece > 0) || (!turn && piece < 0)) {
       dispatch(highlight(tile, piece));
       return;
     }
-    let highlightedTiles = store.getState("tiles").tiles.highlightedTiles;
-    let selectedTile = store.getState("tiles").tiles.selectedTile;
+    let highlightedTiles = store.getState("state").highlightedTiles;
+    let selectedTile = store.getState("state").selectedTile;
     // Check if the player selected a piece and the piece can move to the clicked tile
     if (selectedTile !== -1 && highlightedTiles.find(htile => htile === tile) >= 0) {
       // Check if the King died
@@ -36,13 +36,11 @@ function handleClick(tile, piece, dispatch) {
 
 function Tile(props) {
   const dispatch = useDispatch();
-  const name = useSelector(state => state.tiles.board[props.tile]);
-  const bg = useSelector(state => state.tiles.tileBg[props.tile]);
+  const name = useSelector(state => state.board[props.tile]);
+  const bg = useSelector(state => state.tileBg[props.tile]);
   const style = {
-    border: "2px solid #666",
     backgroundColor: props.bg,
-    backgroundImage: "none",
-    height: "80px"
+    backgroundImage: "none"
   };
 
   if (bg === 1) {
@@ -56,7 +54,7 @@ function Tile(props) {
     style.backgroundImage = "radial-gradient(red, darkred)";
   }
   return (
-    <div style={style} onClick={() => handleClick(props.tile, name, dispatch)}>
+    <div style={style} className="tile" onClick={() => handleClick(props.tile, name, dispatch)}>
       <Image name={name} />
     </div>
   );
