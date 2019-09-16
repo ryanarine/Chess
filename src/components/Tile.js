@@ -16,8 +16,8 @@ function handleClick(tile, piece, dispatch) {
     let selectedTile = store.getState("state").selectedTile;
     // Check if the player selected a piece and the piece can move to the clicked tile
     if (selectedTile !== -1 && highlightedTiles.find(htile => htile === tile) >= 0) {
-      // Check if the King died
       dispatch(move(tile, piece));
+      // Check if the King died
       if (Math.abs(piece) === 1) {
         piece === 1 ? dispatch(win(false)) : dispatch(win(true));
       }
@@ -52,6 +52,12 @@ function Tile(props) {
   } else if (bg === 3) {
     style.backgroundColor = "#db1010";
     style.backgroundImage = "radial-gradient(red, darkred)";
+  } else if (bg === 4) {
+    style.backgroundColor = "#db1010";
+    style.backgroundImage = "radial-gradient(red, black)";
+  } else if (bg === 5) {
+    style.backgroundColor = "#a820a8";
+    style.backgroundImage = "radial-gradient(#cf0df0, purple)";
   }
   return (
     <div style={style} className="tile" onClick={() => handleClick(props.tile, name, dispatch)}>
