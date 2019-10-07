@@ -31,7 +31,7 @@ function getInitialState(WWins = 0, BWins = 0) {
     whiteWins: WWins,
     blackWins: BWins,
     passantTile: -1, // The tile position of a pawn that has moved 2 spaces forward in the previous turn
-    // These following variables are used to check for castling
+    // The following variables are used to check for castling
     // If the variable is false and the corresponding piece is at its initial position
     // then that piece has not moved at all and is therefore available for castling
     castling: {
