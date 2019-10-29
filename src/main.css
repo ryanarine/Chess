@@ -53,6 +53,7 @@ input[type="submit"] {
 #header h2 {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 100;
+  font-size: calc(12px + 1vw);
   display: inline;
   margin: 0;
 }
@@ -65,19 +66,20 @@ input[type="submit"] {
 
 #reset {
   margin: 0 0 4px;
-  font-size: 20px;
+  font-size: calc(8px + 1vw);
   color: white;
   -ms-grid-column-align: center;
       justify-self: center;
   -ms-grid-column: 1;
   -ms-grid-column-span: 3;
   grid-column: 1 / 4;
-  padding: 2px 15px;
+  padding: 2px 10px;
 }
 
 @media (min-width: 768px) {
   #reset {
     font-size: calc(6px + 1.25vw);
+    padding: 2px 15px;
   }
 }
 
@@ -88,16 +90,11 @@ input[type="submit"] {
   -ms-grid-columns: (1fr)[8];
       grid-template-columns: repeat(8, 1fr);
   width: 100%;
+  min-width: 80vh;
+  max-width: 120vh;
+  margin: auto;
   -webkit-box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
           box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
-}
-
-@media (min-width: 768px) {
-  #board {
-    min-width: 80vh;
-    max-width: 120vh;
-    margin: auto;
-  }
 }
 
 .tile {
