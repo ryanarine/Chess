@@ -20,6 +20,10 @@ $tablet-width: 768px;
   }
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body,
 html {
   min-height: 100%;
@@ -62,28 +66,38 @@ input[type="submit"] {
     @include font;
     display: inline;
     margin: 0;
+    @include tablet {
+      font-size: calc(10px + 1.25vw);
+    }
   }
 }
 
 #reset {
-  margin: 4px 0;
+  margin: 0 0 4px;
   font-size: 20px;
   color: white;
   justify-self: center;
   grid-column: 1 / 4;
-  animation: spin 4000ms infinite linear;
+  padding: 2px 15px;
+  @include tablet {
+    font-size: calc(6px + 1.25vw);
+  }
 }
 
-/* The chess board */
+/* The Chess Board */
 #board {
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   width: 100%;
-  box-shadow: 10px 10px 10px black;
+  box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+  @include tablet {
+    min-width: 80vh;
+    max-width: 120vh;
+    margin: auto;
+  }
 }
 
 .tile {
-  border: 2px solid #666;
   height: 10vh;
 }
 

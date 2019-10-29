@@ -38,9 +38,14 @@ function Tile(props) {
   const dispatch = useDispatch();
   const name = useSelector(state => state.board[props.tile]);
   const bg = useSelector(state => state.tileBg[props.tile]);
+  const border = "2px solid #888";
   const style = {
     backgroundColor: props.bg,
-    backgroundImage: "none"
+    backgroundImage: "none",
+    borderRight: border,
+    borderBottom: border,
+    borderLeft: props.tile % 8 === 0 ? border : "none",
+    borderTop: props.tile < 8 ? border : "none"
   };
 
   if (bg === 1) {

@@ -1,3 +1,8 @@
+* {
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
 body,
 html {
   min-height: 100%;
@@ -52,8 +57,14 @@ input[type="submit"] {
   margin: 0;
 }
 
+@media (min-width: 768px) {
+  #header h2 {
+    font-size: calc(10px + 1.25vw);
+  }
+}
+
 #reset {
-  margin: 4px 0;
+  margin: 0 0 4px;
   font-size: 20px;
   color: white;
   -ms-grid-column-align: center;
@@ -61,23 +72,35 @@ input[type="submit"] {
   -ms-grid-column: 1;
   -ms-grid-column-span: 3;
   grid-column: 1 / 4;
-  -webkit-animation: spin 4000ms infinite linear;
-          animation: spin 4000ms infinite linear;
+  padding: 2px 15px;
 }
 
-/* The chess board */
+@media (min-width: 768px) {
+  #reset {
+    font-size: calc(6px + 1.25vw);
+  }
+}
+
+/* The Chess Board */
 #board {
   display: -ms-grid;
   display: grid;
   -ms-grid-columns: (1fr)[8];
       grid-template-columns: repeat(8, 1fr);
   width: 100%;
-  -webkit-box-shadow: 10px 10px 10px black;
-          box-shadow: 10px 10px 10px black;
+  -webkit-box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+          box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 768px) {
+  #board {
+    min-width: 80vh;
+    max-width: 120vh;
+    margin: auto;
+  }
 }
 
 .tile {
-  border: 2px solid #666;
   height: 10vh;
 }
 
